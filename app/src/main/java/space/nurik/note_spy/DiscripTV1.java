@@ -32,8 +32,8 @@ public class DiscripTV1 extends AppCompatActivity {
     private Button re_shifer;
     //private String base64;
     //private String text;
-    private final static String FILE_text_message = "text_message.txt";
-    private final static String FILE_edit_message = "edit_message.txt";
+    private String FILE_text_message;
+    private String FILE_edit_message;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +47,15 @@ public class DiscripTV1 extends AppCompatActivity {
         edit_message = findViewById(R.id.edit_message);
         //button = findViewById(R.id.button);
 
+
         openText(text_message);
-        openEdit(edit_message);
+//        openEdit(edit_message);
         Button save = (Button) findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveText_message(text_message);
-                saveEdit_message(edit_message);
+                //saveEdit_message(edit_message);
             }
         });
         Button shifer = (Button) findViewById(R.id.shifer);
@@ -161,8 +162,8 @@ public class DiscripTV1 extends AppCompatActivity {
         FileOutputStream fos = null;
         try {
             String text = text_message.getText().toString();
-            //String edit = edit_name.getText().toString();
-            fos = openFileOutput(FILE_text_message, MODE_PRIVATE);
+            String edit = edit_name.getText().toString();
+            fos = openFileOutput(edit, MODE_PRIVATE);
             fos.write(text.getBytes());
             Toast.makeText(this, "Файл сохранен", Toast.LENGTH_SHORT).show();
         }
@@ -181,30 +182,31 @@ public class DiscripTV1 extends AppCompatActivity {
             }
         }
     }
-    public void saveEdit_message(View view){
-
-        FileOutputStream fos = null;
-        try {
-            String text = edit_message.getText().toString();
-            fos = openFileOutput(FILE_edit_message, MODE_PRIVATE);
-            fos.write(text.getBytes());
-            Toast.makeText(this, "Файл сохранен", Toast.LENGTH_SHORT).show();
-        }
-        catch(IOException ex) {
-
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-        finally{
-            try{
-                if(fos!=null)
-                    fos.close();
-            }
-            catch(IOException ex){
-
-                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    public void saveEdit_message(View view){
+//
+//        FileOutputStream fos = null;
+//        try {
+//            String text = edit_message.getText().toString();
+//            String text_name = edit_name.getText().toString();
+//            fos = openFileOutput(text_name, MODE_PRIVATE);
+//            fos.write(text.getBytes());
+//            Toast.makeText(this, "Файл сохранен", Toast.LENGTH_SHORT).show();
+//        }
+//        catch(IOException ex) {
+//
+//            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+//        }
+//        finally{
+//            try{
+//                if(fos!=null)
+//                    fos.close();
+//            }
+//            catch(IOException ex){
+//
+//                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
     // открытие файла
     public void openText(View view){
 
@@ -233,32 +235,32 @@ public class DiscripTV1 extends AppCompatActivity {
         }
     }
 
-    public void openEdit(View view){
-
-        FileInputStream fin = null;
-        try {
-            fin = openFileInput(FILE_edit_message);
-            byte[] bytes = new byte[fin.available()];
-            fin.read(bytes);
-            String text = new String (bytes);
-            edit_message.setText(text);
-        }
-        catch(IOException ex) {
-
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-        finally{
-
-            try{
-                if(fin!=null)
-                    fin.close();
-            }
-            catch(IOException ex){
-
-                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    public void openEdit(View view){
+//
+//        FileInputStream fin = null;
+//        try {
+//            fin = openFileInput(FILE_edit_message);
+//            byte[] bytes = new byte[fin.available()];
+//            fin.read(bytes);
+//            String text = new String (bytes);
+//            edit_message.setText(text);
+//        }
+//        catch(IOException ex) {
+//
+//            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+//        }
+//        finally{
+//
+//            try{
+//                if(fin!=null)
+//                    fin.close();
+//            }
+//            catch(IOException ex){
+//
+//                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
 //    public void saveText(View view){
 //        FileOutputStream fos = null;
