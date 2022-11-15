@@ -3,6 +3,7 @@ package space.nurik.note_spy;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Base64;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Paths;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -74,6 +76,7 @@ public class DiscripTV1 extends AppCompatActivity {
         shifer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                base();
                 showResult();
                 blockKlava();
                 shifer.setTextColor(Color.WHITE);
@@ -85,6 +88,7 @@ public class DiscripTV1 extends AppCompatActivity {
         re_shifer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                base64();
                 dimesResult();
                 blockKlava();
                 shifer.setTextColor(Color.BLACK);
@@ -101,13 +105,13 @@ public class DiscripTV1 extends AppCompatActivity {
             }
         });
 
-        Timer myTimer;
-        myTimer = new Timer();
-        myTimer.schedule(new TimerTask() {
-            public void run() {
-                timerTick();
-            }
-        }, 0, 2000); // каждые 2 секунд
+//        Timer myTimer;
+//        myTimer = new Timer();
+//        myTimer.schedule(new TimerTask() {
+//            public void run() {
+//                timerTick();
+//            }
+//        }, 0, 2000); // каждые 2 секунд
 
 //        String editTextValue = "Нурик хеллоу";
 //
@@ -143,39 +147,80 @@ public class DiscripTV1 extends AppCompatActivity {
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
-    private void timerTick() {
-        this.runOnUiThread(doTask);
+    private void base64(){
+        String name = text_message.getText().toString();
+        byte[] decrypt= Base64.decode(name, Base64.DEFAULT);
+        String text = null;
+        try {
+            text = new String(decrypt, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        edit_message.setText(text);
     }
-    private Runnable doTask = new Runnable() {
-        public void run() {
-            String name = edit_message.getText().toString();
+    private void base(){
+        String name = edit_message.getText().toString();
 
-            byte[] encrpt= new byte[0];
-            try {
-                encrpt = name.getBytes("UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            String base64 = Base64.encodeToString(encrpt, Base64.DEFAULT);
-//            text_message.setText(base64);
-//            byte[] decrypt= Base64.decode(base64, Base64.DEFAULT);
-//                String text;
+        byte[] encrpt= new byte[0];
+        try {
+            encrpt = name.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String base64 = Base64.encodeToString(encrpt, Base64.DEFAULT);
+        text_message.setText(base64);
+    }
+
+
+
+//    private void timerTick() {
+//        this.runOnUiThread(doTask);
+//    }
+//    private Runnable doTask = new Runnable() {
+//        public void run() {
+//            String name = edit_message.getText().toString();
+//
+//            byte[] encrpt= new byte[0];
 //            try {
-//                text = new String(decrypt, "UTF-8");
+//                encrpt = name.getBytes("UTF-8");
 //            } catch (UnsupportedEncodingException e) {
 //                e.printStackTrace();
 //            }
-        }
-    };
+//            String base64 = Base64.encodeToString(encrpt, Base64.DEFAULT);
+//            text_message.setText(base64);
+//
+//        }
+//    };
 
     // сохранение файла
     public void saveText_message(View view){
 
         FileOutputStream fos = null;
         try {
+            base();
             String text = text_message.getText().toString();
-            String edit = edit_name.getText().toString();
-            fos = openFileOutput(edit, MODE_PRIVATE);
+            String text_name = edit_name.getText().toString();
+
+            String path = Environment.getExternalStorageDirectory().toString()+"/Documents/notespy/";
+
+            File directory = new File(path);
+            directory.mkdirs();
+            File outputFile = new File(directory, text_name + ".txt");
+
+            Bundle arguments = getIntent().getExtras();
+            String fileName = arguments.get("fileName").toString();
+//            edit_name.setText(fileName.substring(0, fileName.lastIndexOf('.')));
+//            FileOutputStream fos = new FileOutputStream(outputFile);
+//            fos = new openFileOutput(outputFile, MODE_PRIVATE);
+
+            //Path path = Paths.get(data.getData().getPath()).getParent());
+//            String fileName = path.getName().toString();
+            File from = new File(path, fileName);
+            File to = new File(path,text_name + ".txt");
+            from.renameTo(to);
+
+
+            fos = new FileOutputStream(outputFile);
             fos.write(text.getBytes());
             Toast.makeText(this, "Файл сохранен", Toast.LENGTH_SHORT).show();
         }
@@ -236,11 +281,6 @@ public class DiscripTV1 extends AppCompatActivity {
         FileInputStream fin = null;
         try {
             String path = Environment.getExternalStorageDirectory().toString()+"/Documents/notespy/" + fileName;
-//            fin = openFileInput(path);
-//            byte[] bytes = new byte[fin.available()];
-//            fin.read(bytes);
-//            String text = new String (bytes);
-//            text_message.setText(text);
 
             File fl = new File(path);
             fin = new FileInputStream(fl);

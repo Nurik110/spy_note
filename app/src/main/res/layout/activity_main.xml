@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="@color/black"
     tools:context=".MainActivity">
 
@@ -29,43 +30,18 @@
 
 <!--    </LinearLayout>-->
 <!--    android:layout_below="@id/header"-->
-
-    <ScrollView
-        android:layout_above="@id/footer"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="vertical">
-            <LinearLayout
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+    </LinearLayout>
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-            </LinearLayout>
-<!--            <TextView-->
-<!--                android:id="@+id/tv_1"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:text="task1"-->
-<!--                android:gravity="center"-->
-<!--                android:textSize="20sp"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:background="@drawable/rectangle"/>-->
-
-        </LinearLayout>
-    </ScrollView>
     <LinearLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"
