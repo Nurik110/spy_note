@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -156,9 +158,19 @@ public class Discrip  extends AppCompatActivity {
 
         FileOutputStream fos = null;
         try {
+
             String text = text_message.getText().toString();
             String text_name = edit_name.getText().toString();
-            fos = openFileOutput(text_name, MODE_PRIVATE);
+
+            String path = Environment.getExternalStorageDirectory().toString()+"/Documents/notespy/";
+
+            File directory = new File(path);
+            directory.mkdirs();
+            File outputFile = new File(directory, text_name + ".txt");
+//            FileOutputStream fos = new FileOutputStream(outputFile);
+
+//            fos = new openFileOutput(outputFile, MODE_PRIVATE);
+            fos = new FileOutputStream(outputFile);
             fos.write(text.getBytes());
             Toast.makeText(this, "Файл сохранен", Toast.LENGTH_SHORT).show();
         }

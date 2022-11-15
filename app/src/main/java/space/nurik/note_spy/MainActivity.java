@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -39,14 +41,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        TextView tv_1 = (TextView) findViewById(R.id.tv_1);
-        tv_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DiscripTV1.class);
-                startActivity(intent);finish();
-            }
-        });
+        String path = Environment.getExternalStorageDirectory().toString()+"/Documents/notespy";
+        File directory = new File(path);
+        directory.mkdirs();
+
+        File[] files = directory.listFiles();
+
+        for (int i = 0; i < files.length; i++)
+        {
+            String fileName = files[i].getName();
+            TextView tv_1 = (TextView) findViewById(R.id.tv_1);
+            tv_1.setText(fileName.substring(0, fileName.lastIndexOf('.')));
+
+            tv_1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, DiscripTV1.class);
+                    intent.putExtra("fileName", fileName);
+                    startActivity(intent);finish();
+
+                }
+            });
+        }
+
+
+
 //
 //        String editTextValue = "Нурик хеллоу";
 //

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,9 +15,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,8 +35,6 @@ public class DiscripTV1 extends AppCompatActivity {
     private Button button_back;
     private Button shifer;
     private Button re_shifer;
-    //private String base64;
-    //private String text;
     private String FILE_text_message;
     private String FILE_edit_message;
     @Override
@@ -39,16 +42,25 @@ public class DiscripTV1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tv_1_discrip);
 
-        //edit_name = findViewById(R.id.edit_name);
+        edit_name = findViewById(R.id.edit_name);
         save = findViewById(R.id.save);
         shifer = findViewById(R.id.shifer);
         re_shifer = findViewById(R.id.re_shifer);
         text_message = findViewById(R.id.text_message);
         edit_message = findViewById(R.id.edit_message);
-        //button = findViewById(R.id.button);
+        //button = findViewById(R.id.button);\
+
+        Bundle arguments = getIntent().getExtras();
+
+        String fileName = arguments.get("fileName").toString();
+        edit_name.setText(fileName.substring(0, fileName.lastIndexOf('.')));
 
 
-        openText(text_message);
+        try {
+            openText(text_message, fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 //        openEdit(edit_message);
         Button save = (Button) findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
@@ -207,16 +219,35 @@ public class DiscripTV1 extends AppCompatActivity {
 //            }
 //        }
 //    }
+
+    public static String convertStreamToString(InputStream is) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        reader.close();
+        return sb.toString();
+    }
     // открытие файла
-    public void openText(View view){
+    public void openText(View view, String fileName) throws Exception {
 
         FileInputStream fin = null;
         try {
-            fin = openFileInput(FILE_text_message);
-            byte[] bytes = new byte[fin.available()];
-            fin.read(bytes);
-            String text = new String (bytes);
-            text_message.setText(text);
+            String path = Environment.getExternalStorageDirectory().toString()+"/Documents/notespy/" + fileName;
+//            fin = openFileInput(path);
+//            byte[] bytes = new byte[fin.available()];
+//            fin.read(bytes);
+//            String text = new String (bytes);
+//            text_message.setText(text);
+
+            File fl = new File(path);
+            fin = new FileInputStream(fl);
+            String ret = convertStreamToString(fin);
+            //Make sure you close all streams.
+            fin.close();
+            text_message.setText(ret);
         }
         catch(IOException ex) {
 
